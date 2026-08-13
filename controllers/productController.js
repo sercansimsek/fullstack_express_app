@@ -1,5 +1,16 @@
-export async function getGenres() {
-  console.log("genres");
+import { getDBConnection } from "../db/db.js";
+
+export async function getGenres(req, res) {
+  try {
+    const db = await getDBConnection();
+
+    const genreRows = await db.all("SELECT DISTINCT genre From products");
+    const genres = genreRows.map((row) => row.genre);
+    res.json(genres);
+  } catch (err) {
+    res.statusCode = 500;
+    res.json({ error: "Filed to fetch genres", details: err.message });
+  }
 }
 
 export async function getProducts() {
