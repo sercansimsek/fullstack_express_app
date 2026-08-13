@@ -13,6 +13,15 @@ export async function getGenres(req, res) {
   }
 }
 
-export async function getProducts() {
-  console.log("products");
+export async function getProducts(req, res) {
+  try {
+    const db = await getDBConnection();
+
+    let query = "SELECT * FROM products";
+    const products = await db.all(query);
+    res.json(products);
+  } catch (err) {
+    res.statusCode = 500;
+    res.json({ error: "Filed to fetch products", details: err.message });
+  }
 }
